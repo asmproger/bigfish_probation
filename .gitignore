@@ -1,6 +1,6 @@
 /.idea/
-/.php-version
-/.env
+.php-version
+.env
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
