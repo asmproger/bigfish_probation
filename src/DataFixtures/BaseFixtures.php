@@ -67,7 +67,7 @@ class BaseFixtures extends Fixture
         $material = new Material();
         $material->setTitle('Публикация_' . mt_rand(10, 100));
         $material->setCategory($categories[3]);
-        $material->setContent('Forth category material content');
+        $material->setContent('Fourth category material content');
 
         $image = new Image();
         $image->setPath('images/test2.jpeg');

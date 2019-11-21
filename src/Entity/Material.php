@@ -33,6 +33,12 @@ class Material
     private $title;
 
     /**
+     * @var string
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $materialContent;
+
+    /**
      * @var UploadedFile
      */
     private $imageFile;
@@ -49,11 +55,6 @@ class Material
      */
     private $category;
 
-    /**
-     * @var string
-     * @ORM\Column(type="text" nullable=true)
-     */
-    private $content;
 
     /**
      * @return mixed
@@ -149,7 +150,7 @@ class Material
      */
     public function getContent(): ?string
     {
-        return $this->content;
+        return $this->materialContent;
     }
 
     /**
@@ -158,7 +159,7 @@ class Material
      */
     public function setContent(string $content): Material
     {
-        $this->content = $content;
+        $this->materialContent = $content;
 
         return $this;
     }

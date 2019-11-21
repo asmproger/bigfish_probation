@@ -29,6 +29,11 @@ class CommandParser
             'hasParameter' => true,
             'code' => 'getMaterials',
         ],
+        [
+            'command' => '/публикация',
+            'hasParameter' => true,
+            'code' => 'getMaterial',
+        ],
     ];
 
     /**

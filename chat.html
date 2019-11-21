@@ -81,6 +81,12 @@
                 },
                 success: function(response) {
                     if(response.status) {
+                        if(response.content !== undefined) {
+                            addMessage(response.content);
+                            if(response.image) {
+                                addImage(response.image);
+                            }
+                        }
                         if(response.message !== undefined) {
                             addMessage(response.message);
                         } else if(response.data !== undefined) {

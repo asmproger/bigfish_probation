@@ -63,7 +63,6 @@ class Subscriber implements EventSubscriberInterface
 
         $imageFile = $item->getImageFile();
         if ($imageFile instanceof UploadedFile) {
-            $this->log->debug('WTF UPDATE BRO');
             $image = $this->fileUploader->uploadImage($imageFile, $item->getImage());
             $item->setImage($image);
             $image->setMaterial($item);

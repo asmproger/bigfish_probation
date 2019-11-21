@@ -26,14 +26,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ApiController extends AbstractController
 {
-/*
- * что осталось
- * 1. чтение публикаций в чате
- * 2. прикрутить картинки к фикстурам и сделать отображение в чате
- * 3. ридми
- * 4. сделать миграцию с кодом базы
- * */
-
 
     /**
      * @var EntityManagerInterface
@@ -149,4 +141,24 @@ class ApiController extends AbstractController
             ];
     }
 
+    /**
+     * @param string $materialId
+     * @return array
+     */
+    public function getMaterial(string $materialId): array
+    {
+        $materialRepository = $this->entityManager->getRepository(Material::class);
+        $item = $materialRepository->find($materialId);
+
+        return $item ?
+            [
+                'status' => true,
+                'content' => $item->getContent(),
+                'image' => $item->getImage()->getPath(),
+            ] :
+            [
+                'status' => true,
+                'message' => 'публикация не найдена',
+            ];
+    }
 }
