@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <style>
+        #chat-window {
+            max-width: 600px;
+            margin: 0 auto;
+            margin-top: 10%;
+        }
+
+        #chat-dialog {
+            border: 1px solid gray;
+            background: #f4f4f4;
+            height: 300px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-top: 10px;
+        }
+
+        #chat-dialog .chat-message {
+            padding: 0 10px;
+            margin: 0 0 5px 0;
+        }
+        #chat-dialog .response {
+            color: red;
+        }
+        #chat-dialog .question {
+            color: green;
+            text-align: right;
+        }
+
+        #chat-controls {
+            text-align: center;
+            margin-top: 30px;
+        }
+        #chat-question {
+            font-size: 18px;
+            height: 30px;
+            width: 300px;
+            padding: 3px 3px 0 3px;
+        }
+
+        .chat-image {
+            max-width: 100px;
+        }
+    </style>
+    <script>
+        var domain = 'http://0.0.0.0:3000';
+        function addMessage(message, type)
+        {
+            var messageClass = (type === 1) ? 'question' : 'response';
+            messageClass = 'chat-message ' + messageClass;
+            var messageObj = $('<p class="' + messageClass + '" >' + message + '</p>');
+            $('#chat-dialog').append(messageObj);
+            $('#chat-dialog').scrollTop($('#chat-dialog')[0].scrollHeight);
+        }
+
+        function addImage(image) {
+            var imageAddr = domain + '/' + image;
+            var imgContainer = $('<div class="image-container">');
+            var aObj = $('<a href="javascript:void(0)" class="toggle-image">Показать изображение</a>')
+            var imgObj =  $('<img src="' + imageAddr + '" class="chat-image" style="display: none;">');
+            imgContainer.append(aObj);
+            imgContainer.append(imgObj);
+            $('#chat-dialog').append(imgContainer);
+        }
+        function request(text)
+        {
+            $.ajax({
+                url: domain + '/api/get-data',
+                dataType: 'json',
+                method: 'get',
+                data: {
+                    'command': text
+                },
+                success: function(response) {
+                    if(response.status) {
+                        if(response.message !== undefined) {
+                            addMessage(response.message);
+                        } else if(response.data !== undefined) {
+                            response.data.forEach(function (item, index) {
+                                addMessage(item.title);
+                                if(item.image) {
+                                    addImage(item.image);
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        }
+        $(document).ready(function() {
+            $(document).on('click', '.toggle-image', function() {
+               var self = $(this), parent = self.closest('.image-container');
+               if(self.data('visible') == 1) {
+                   self.text('Показать изображение');
+                   self.data('visible', 0);
+                   parent.find('img').hide();
+               } else {
+                   self.text('Скрыть изображение');
+                   self.data('visible', 1);
+                   parent.find('img').show();
+               }
+            });
+            $(document).on('keydown', '#chat-question', function (e) {
+                var self = $(this), value = self.val();
+                if(e.keyCode === 13 && value.length > 0) {
+                    addMessage(value, 1);
+                    request(value);
+                    self.val('');
+                }
+            })
+        });
+    </script>
+</head>
+<body>
+<div id="chat-window">
+    <div id="chat-dialog">
+        <p class="chat-message response">Введите команду</p>
+        <!--<p class="chat-message question">User question (right)</p>-->
+    </div>
+    <div id="chat-controls">
+<!--        <input type="text" id="chat-question" value="/Список категорий">-->
+        <input type="text" id="chat-question" value="/Публикации по категории № 26">
+    </div>
+</div>
+</body>
+</html>

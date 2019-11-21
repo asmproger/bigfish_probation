@@ -1,6 +1,15 @@
 easy_admin:
     entities:
-        # List the entity class name you want to manage
-        - App\Entity\User
-        - App\Entity\Category
-        - App\Entity\Material
+        Category:
+            class: App\Entity\Category
+            label: Categories
+        Material:
+            class: App\Entity\Material
+            label: Materials
+            new:
+                fields: ['title', {property: 'imageFile', type: 'file'}, 'category']
+            edit:
+                fields: ['title', {property: 'imageFile', type: 'file'}, 'category']
+        User:
+            class: App\Entity\User
+            label: Users

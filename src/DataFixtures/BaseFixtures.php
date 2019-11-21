@@ -8,6 +8,7 @@ namespace App\DataFixtures;
 
 
 use App\Entity\Category;
+use App\Entity\Image;
 use App\Entity\Material;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -29,35 +30,50 @@ class BaseFixtures extends Fixture
         $categories = [];
         for ($i = 0; $i < 5; $i++) {
             $category = new Category();
-            $category->setTitle('Категория №' . ($i + 1));
+            $category->setTitle('Категория_' . mt_rand(10, 100));
             $manager->persist($category);
 
             $categories[] = $category;
         }
+        $manager->flush();
 
         for ($i = 0; $i < 3; $i++) {
             $material = new Material();
-            $material->setTitle('Публикация № ' . ($i + 1) . ' в категории № ' . $categories[0]->getId());
+            $material->setTitle('Публикация_' . mt_rand(10, 100));
             $material->setCategory($categories[0]);
+            $material->setContent('First category ' . $i .' material content');
             $manager->persist($material);
         }
         for ($i = 0; $i < 3; $i++) {
             $material = new Material();
-            $material->setTitle('Публикация № ' . ($i + 1) . ' в категории № ' . $categories[1]->getId());
+            $material->setTitle('Публикация_' . mt_rand(10, 100));
             $material->setCategory($categories[1]);
+            $material->setContent('Second category ' . $i .' material content');
             if ($i == 0) {
-                $material->setImage('https://images.pexels.com/photos/459225/pexels-photo-459225.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+                $image = new Image();
+                $image->setPath('images/test1.jpeg');
+                $image->setMaterial($material);
+                $manager->persist($image);;
             }
             $manager->persist($material);
         }
 
         $material = new Material();
-        $material->setTitle('Публикация № 1 в категории № ' . $categories[2]->getId());
+        $material->setTitle('Публикация_' . mt_rand(10, 100));
+        $material->setCategory($categories[2]);
+        $material->setContent('Third category material content');
         $manager->persist($material);
 
         $material = new Material();
-        $material->setTitle('Публикация № 1 в категории № ' . $categories[3]->getId());
-        $material->setImage('https://images.pexels.com/photos/248797/pexels-photo-248797.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+        $material->setTitle('Публикация_' . mt_rand(10, 100));
+        $material->setCategory($categories[3]);
+        $material->setContent('Forth category material content');
+
+        $image = new Image();
+        $image->setPath('images/test2.jpeg');
+        $image->setMaterial($material);
+        $manager->persist($image);
+
         $manager->persist($material);
 
         $manager->flush();

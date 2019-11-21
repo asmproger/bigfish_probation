@@ -8,6 +8,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class Material
@@ -32,8 +33,13 @@ class Material
     private $title;
 
     /**
-     * @var string
-     * @ORM\Column(type="string", length=1000, nullable=true)
+     * @var UploadedFile
+     */
+    private $imageFile;
+
+    /**
+     * @var Image
+     * @ORM\OneToOne(targetEntity="Image", mappedBy="material", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private $image;
 
@@ -42,6 +48,12 @@ class Material
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="materials")
      */
     private $category;
+
+    /**
+     * @var string
+     * @ORM\Column(type="text" nullable=true)
+     */
+    private $content;
 
     /**
      * @return mixed
@@ -71,18 +83,18 @@ class Material
     }
 
     /**
-     * @return string|null
+     * @return Image|null
      */
-    public function getImage(): ?string
+    public function getImage(): ?Image
     {
         return $this->image;
     }
 
     /**
-     * @param string|null $image
+     * @param Image|null $image
      * @return Material
      */
-    public function setImage(?string $image): Material
+    public function setImage(?Image $image): Material
     {
         $this->image = $image;
 
@@ -104,6 +116,49 @@ class Material
     public function setCategory(?Category $category): Material
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getTitle();
+    }
+
+    /**
+     * @return UploadedFile
+     */
+    public function getImageFile(): ?UploadedFile
+    {
+        return $this->imageFile;
+    }
+
+    /**
+     * @param UploadedFile $imageFile
+     * @return Material
+     */
+    public function setImageFile(UploadedFile $imageFile): Material
+    {
+        $this->imageFile = $imageFile;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param string $content
+     * @return Material
+     */
+    public function setContent(string $content): Material
+    {
+        $this->content = $content;
 
         return $this;
     }
